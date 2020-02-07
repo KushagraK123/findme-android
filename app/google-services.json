@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "77409035989",
+    "firebase_url": "https://find-me-87953.firebaseio.com",
+    "project_id": "find-me-87953",
+    "storage_bucket": "find-me-87953.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77409035989:android:a261ee409f86cf0358645c",
+        "android_client_info": {
+          "package_name": "com.empyrealgames.findme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77409035989-aan1cbqqb3jfufd9lctm9vsg8jidkqnu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWzq-ngO1ecluKbukq6RGlxgu1PhCcrJs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "77409035989-aan1cbqqb3jfufd9lctm9vsg8jidkqnu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

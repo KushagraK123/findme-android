@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/login_navigation"
+    app:startDestination="@id/loginFrag">
+
+    <fragment
+        android:id="@+id/loginFrag"
+        android:name="com.empyrealgames.findme.login.LoginFrag"
+        android:label="LoginFrag" >
+        <action
+            android:id="@+id/action_loginFrag_to_otpFrag"
+            app:destination="@id/otpFrag" />
+    </fragment>
+    <fragment
+        android:id="@+id/otpFrag"
+        android:name="com.empyrealgames.findme.login.OtpFrag"
+        android:label="OtpFrag" >
+        <action
+            android:id="@+id/action_otpFrag_to_loginFrag"
+            app:destination="@id/loginFrag" />
+        <argument
+            android:name="number"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_otpFrag_to_fragSignUp"
+            app:destination="@id/fragSignUp" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragSignUp"
+        android:name="com.empyrealgames.findme.login.FragSignUp"
+        android:label="FragSignUp" />
+
+</navigation>
