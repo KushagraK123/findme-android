@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "77409035989-5jmgjbitqh4eoa4qmtfscpitd9oil9qa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.empyrealgames.findme",
+            "certificate_hash": "1feb7448744c20c5a463ead71e8d59e4efb950d0"
+          }
+        },
+        {
+          "client_id": "77409035989-jgqsiv9vkcs351gik229vjvr60meu2d8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.empyrealgames.findme",
+            "certificate_hash": "4fdafa551813fc21b855504c06cc0742c1848420"
+          }
+        },
+        {
           "client_id": "77409035989-aan1cbqqb3jfufd9lctm9vsg8jidkqnu.apps.googleusercontent.com",
           "client_type": 3
         }

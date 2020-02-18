@@ -1,31 +1,36 @@
 package com.empyrealgames.findme.login
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.empyrealgames.findme.R
+import com.empyrealgames.findme.dashboard.ActivityDash
+import com.empyrealgames.findme.pref.PreferenceManager
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
-import kotlinx.android.synthetic.main.frag_signup.*
+import kotlinx.android.synthetic.main.frag_enter_otp.*
 import java.util.concurrent.TimeUnit
 
 
-class OtpFrag : Fragment() {
+class OtpFrag : Fragment(), FirebaseAuth.AuthStateListener {
     lateinit var navController: NavController
     val args: OtpFragArgs by navArgs()
-
+    lateinit var mAuth: FirebaseAuth
+    lateinit var storeVerificationId:String
+    lateinit var credential:PhoneAuthCredential
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,10 +42,34 @@ class OtpFrag : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-        b_submit_otp.setOnClickListener { navController.navigate(R.id.action_otpFrag_to_fragSignUp) }
-        verifyNumber("+91-" + args.number.toString())
+        mAuth = FirebaseAuth.getInstance()
+        b_submit_otp.setOnClickListener {
+             credential = PhoneAuthProvider.getCredential(storeVerificationId, et_otp.text.toString())
+            signInWithPhoneAuthCredential(credential)
+
+            //navController.navigate(R.id.action_otpFrag_to_fragSignUp)
+        }
+        mAuth.addAuthStateListener(this)
+        verifyNumber("+91-" + args.number)
     }
 
+
+    // [START sign_in_with_phone]
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+
+        Log.d("login", "onVerificationCompleted:$credential" + " sign in matahfacka")
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    println("signed in user")
+
+                }else{
+
+                    Toast.makeText(context, "failed baby baby", Toast.LENGTH_LONG).show()
+                }
+            }
+
+    }
     fun verifyNumber(number: String) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             number, // Phone number to verify
@@ -49,6 +78,7 @@ class OtpFrag : Fragment() {
             activity!!,
             callbacks
         )
+        println("called verifyNumber" + number)
     }
 
     var callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -61,7 +91,10 @@ class OtpFrag : Fragment() {
             //     detect the incoming verification SMS and perform verification without
             //     user action.
             Log.d("login", "onVerificationCompleted:$credential")
-//            signInWithPhoneAuthCredential(credential)
+            mAuth.signInWithCredential(credential)
+          //  Toast.makeText(context, mAuth.currentUser!!.phoneNumber + " just signed in", Toast.LENGTH_LONG).show()
+
+
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
@@ -85,12 +118,15 @@ class OtpFrag : Fragment() {
             verificationId: String,
             token: PhoneAuthProvider.ForceResendingToken
         ) {
+            super.onCodeSent(verificationId, token)
+            println("onCodeSent")
             // The SMS verification code has been sent to the provided phone number, we
             // now need to ask the user to enter the code and then construct a credential
             // by combining the code with a verification ID.
            Toast.makeText(context, "Code is sent", Toast.LENGTH_LONG).show()
          //   storedVerificationId = verificationId
             // Save verification ID and resending token so we can use them later
+            storeVerificationId = verificationId
             /*storedVerificationId = verificationId
             resendToken = token
             */
@@ -98,6 +134,22 @@ class OtpFrag : Fragment() {
         }
     }
 
+    override fun onAuthStateChanged(auth: FirebaseAuth) {
+        if(auth.currentUser!=null){
+            val user = auth.currentUser
+            if(user!!.displayName =="" || user.displayName.isNullOrEmpty()){
+                println("user is not prsent")
+                navController.navigate(R.id.action_otpFrag_to_fragSignUp)
+            }else{
+                setUpPrefs()
+                startActivity(Intent(context, ActivityDash::class.java).setFlags( Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            }
+        }
+    }
 
-
+    fun setUpPrefs(){
+        val preferenceManager = PreferenceManager()
+        preferenceManager.setUserName(mAuth.currentUser!!.displayName!!, context!!)
+        preferenceManager.setPhone(mAuth.currentUser!!.phoneNumber!!, context!!)
+    }
 }
