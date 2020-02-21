@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -29,9 +30,15 @@ class LoginFrag : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
         b_continue.setOnClickListener {
-            val num:String = et_number.text.toString()
+            val num:String = et_number.editText!!.text.toString()
             val action = LoginFragDirections.actionLoginFragToOtpFrag(num)
             navController.navigate(action)
         }
+        et_number.editText!!.addTextChangedListener {
+
+            b_continue.isEnabled = !(it == null || it.length <10)
+
+        }
     }
+
 }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_margin="8dp"
+    android:background="@drawable/bg_rounded_corner"
+    android:layout_height="wrap_content"
+    android:elevation="8dp"
+    >
+
+    <ImageView
+        android:id="@+id/fab_profile_pic"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"
+        android:background="@drawable/bg_rounded_image"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="2dp"
+        android:src="@drawable/ic_person_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_username"
+        app:layout_constraintEnd_toStartOf="@+id/tv_username"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/fab_profile_pic"
+        app:layout_constraintTop_toTopOf="@+id/tv_username" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:text="Kushagra Kasliwal"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
+        app:layout_constraintTop_toTopOf="@+id/fab_profile_pic" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="2dp"
+        android:src="@drawable/ic_call_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_mobile"
+        app:layout_constraintEnd_toStartOf="@+id/tv_mobile"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/fab_profile_pic"
+        app:layout_constraintTop_toTopOf="@+id/tv_mobile" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_mobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="+91-8007350050"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_profile_pic"
+        app:layout_constraintStart_toEndOf="@+id/appCompatImageView2" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/b_decline"
+        style="@style/button_text"
+        android:layout_marginEnd="8dp"
+        android:text="Decline"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_mobile"
+        app:layout_constraintEnd_toStartOf="@+id/b_accept"
+        app:layout_constraintTop_toTopOf="@+id/tv_mobile" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/b_accept"
+        style="@style/button_text"
+        android:layout_marginEnd="16dp"
+        android:text="Accept"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_mobile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_mobile" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

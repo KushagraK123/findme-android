@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
@@ -49,6 +50,12 @@ class OtpFrag : Fragment(), FirebaseAuth.AuthStateListener {
 
             //navController.navigate(R.id.action_otpFrag_to_fragSignUp)
         }
+
+        et_otp.addTextChangedListener {
+            b_submit_otp.isEnabled = !(it == null || it.length <6)
+
+        }
+
         mAuth.addAuthStateListener(this)
         verifyNumber("+91-" + args.number)
     }

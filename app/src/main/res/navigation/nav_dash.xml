@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_dash"
+    app:startDestination="@id/fragDash">
+
+    <fragment
+        android:id="@+id/fragDash"
+        android:name="com.empyrealgames.findme.dashboard.FragDash"
+        android:label="FragDash" >
+        <action
+            android:id="@+id/action_fragDash_to_fragAddConnection"
+            app:destination="@id/fragAddConnection" />
+        <action
+            android:id="@+id/action_fragDash_to_profiileDashboard"
+            app:destination="@id/profiileDashboard" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragAddConnection"
+        android:name="com.empyrealgames.findme.dashboard.FragAddConnection"
+        android:label="FragAddConnection">
+        <action
+            android:id="@+id/action_fragAddConnection_to_fragDash"
+            app:destination="@id/fragDash" />
+    </fragment>
+    <fragment
+        android:id="@+id/profiileDashboard"
+        android:name="com.empyrealgames.findme.dashboard.ProfileDashboard"
+        android:label="ProfileDashboard"
+        tools:layout="@layout/fragment_profile_dashboard" >
+        <action
+            android:id="@+id/action_profiileDashboard_to_fragDash"
+            app:destination="@id/fragDash" />
+    </fragment>
+</navigation>
