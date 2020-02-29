@@ -5,13 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.empyrealgames.findme.dashboard.connection.Connection
-import com.empyrealgames.findme.dashboard.connection.Request
+import com.empyrealgames.findme.dashboard.data.Connection
 import kotlinx.android.synthetic.main.connections_list_item.view.*
-import kotlinx.android.synthetic.main.frag_profile.view.*
 import kotlinx.android.synthetic.main.frag_profile.view.tv_mobile
 import kotlinx.android.synthetic.main.frag_profile.view.tv_username
-import android.widget.Toast
 import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
 import com.empyrealgames.findme.R

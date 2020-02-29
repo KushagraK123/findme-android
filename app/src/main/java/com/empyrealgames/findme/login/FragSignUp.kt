@@ -39,7 +39,8 @@ class FragSignUp : Fragment() {
                 .setDisplayName(et_name.text.toString() + " " + et_lastname.text.toString()).build()
             mAuth.currentUser!!.updateProfile(update).addOnCompleteListener {
                 if (it.isSuccessful) {
-                  val user = hashMapOf("uid" to mAuth.currentUser!!.uid)
+                  val user = hashMapOf("uid" to mAuth.currentUser!!.uid,
+                      "username" to mAuth.currentUser!!.displayName)
                     db.collection("users").document(mAuth.currentUser!!.phoneNumber!!).set(user, SetOptions.merge())
                         .addOnSuccessListener { documentReference ->
                             setUpPrefs()

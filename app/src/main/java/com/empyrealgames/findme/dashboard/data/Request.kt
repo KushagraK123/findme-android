@@ -1,4 +1,4 @@
-package com.empyrealgames.findme.dashboard.connection
+package com.empyrealgames.findme.dashboard.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

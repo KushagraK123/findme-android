@@ -1,4 +1,4 @@
-package com.empyrealgames.findme.dashboard.connection
+package com.empyrealgames.findme.dashboard.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -31,5 +31,20 @@ interface ConnectionDao {
 
     @Query("DELETE  FROM Request")
     fun deleteAllRequests()
+
+    @Query("SELECT * FROM Location ")
+    fun allLocations ():LiveData<List<Location>>
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAllLocations(vararg location: Location)
+
+
+    @Delete
+    fun deleteLocation(vararg location: Location)
+
+
+    @Query("DELETE  FROM Location")
+    fun deleteAllLocations()
 
 }

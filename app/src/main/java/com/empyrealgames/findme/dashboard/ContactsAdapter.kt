@@ -5,11 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.empyrealgames.findme.R
-import com.empyrealgames.findme.dashboard.connection.Request
 import kotlinx.android.synthetic.main.frag_profile.view.tv_mobile
 import kotlinx.android.synthetic.main.frag_profile.view.tv_username
 import kotlinx.android.synthetic.main.requests_list_item.view.*
-import java.lang.StringBuilder
 
 class ContactsAdapter(private val myDataset: List<LocalContact>,  val sendRequest: (phone:String, name:String) -> Unit) :
     RecyclerView.Adapter<ContactsAdapter.MyViewHolder>() {

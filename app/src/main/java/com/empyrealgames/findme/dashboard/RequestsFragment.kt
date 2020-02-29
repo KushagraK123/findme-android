@@ -1,23 +1,18 @@
 package com.empyrealgames.findme.dashboard
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.service.autofill.Dataset
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.empyrealgames.findme.R
-import com.empyrealgames.findme.dashboard.connection.ConnectionViewModel
-import com.empyrealgames.findme.dashboard.connection.Request
-import com.google.firebase.firestore.FieldValue
+import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
+import com.empyrealgames.findme.dashboard.data.Request
 import kotlinx.android.synthetic.main.fragment_requests.*
 
 

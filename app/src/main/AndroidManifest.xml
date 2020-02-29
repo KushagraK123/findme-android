@@ -27,7 +27,7 @@
         <activity android:name=".dashboard.FragProfile" />
 
         <service
-            android:name=".LocationFetchService"
+            android:name=".Location.LocationFetchService"
             android:exported="false" />
         <service
             android:name=".dashboard.RequestRecieveService"
@@ -37,6 +37,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <receiver android:name=".Location.LocationReciever">
+
+        </receiver>
     </application>
 
 </manifest>

@@ -5,16 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.empyrealgames.findme.R
-import com.empyrealgames.findme.dashboard.connection.Connection
-import com.empyrealgames.findme.dashboard.connection.ConnectionViewModel
+import com.empyrealgames.findme.dashboard.data.Connection
+import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
 import kotlinx.android.synthetic.main.fragment_connections.*
-import kotlinx.android.synthetic.main.fragment_requests.*
 
 class ConnectionsFragment : Fragment() {
 
@@ -40,7 +36,7 @@ class ConnectionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dataset = listOf()
+        /*dataset = listOf()
         println("Inside conn frag ")
         viewAdapter = ConnectionAdapter(dataset, ::deleteConnection, context!!)
         viewManager = LinearLayoutManager(context)
@@ -54,7 +50,7 @@ class ConnectionsFragment : Fragment() {
                 println("found connection with  " +  conn.phone)
             }
 
-        )
+        )*/
 
         rv_connections.apply {
             setHasFixedSize(true)

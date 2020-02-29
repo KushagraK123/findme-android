@@ -1,4 +1,4 @@
-package com.empyrealgames.findme.dashboard.connection
+package com.empyrealgames.findme.dashboard.data
 
 import android.content.Context
 import androidx.room.Database
@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Connection::class, Request::class], version = 1)
+@Database(entities = [Connection::class, Request::class, Location::class], version = 3)
 abstract class ConnectionDatabase : RoomDatabase() {
 
 

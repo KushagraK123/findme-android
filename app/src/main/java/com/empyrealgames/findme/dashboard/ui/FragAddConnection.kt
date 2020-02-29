@@ -1,9 +1,7 @@
-package com.empyrealgames.findme.dashboard
+package com.empyrealgames.findme.dashboard.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.provider.ContactsContract
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +10,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.CursorLoader
-import androidx.loader.content.Loader
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.empyrealgames.findme.R
@@ -26,19 +21,17 @@ import kotlinx.android.synthetic.main.frag_add_connection.*
 import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.content.ContentResolver
 import androidx.core.widget.addTextChangedListener
-import androidx.cursoradapter.widget.SimpleCursorAdapter
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.empyrealgames.findme.dashboard.connection.Connection
-import com.empyrealgames.findme.dashboard.connection.ConnectionDao_Impl
-import com.empyrealgames.findme.dashboard.connection.ConnectionViewModel
-import com.empyrealgames.findme.dashboard.connection.Request
+import com.empyrealgames.findme.dashboard.ContactsAdapter
+import com.empyrealgames.findme.dashboard.LocalContact
+import com.empyrealgames.findme.dashboard.data.Connection
+import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
+import com.empyrealgames.findme.dashboard.data.Request
 import com.empyrealgames.findme.showDialogUserNotFound
-import kotlinx.android.synthetic.main.fragment_connections.*
+import kotlinx.android.synthetic.main.requests_list_item.view.*
 import java.lang.StringBuilder
 
 
@@ -89,8 +82,38 @@ class FragAddConnection : Fragment() {
             }
 
         )
+
+        var editTextText = ""
         et_number.editText!!.addTextChangedListener {
+            editTextText = it.toString()
             textChanged(it.toString())
+        }
+        et_number.setEndIconOnClickListener {
+            searchOnWeb(editTextText)
+        }
+    }
+
+    fun searchOnWeb( s:String){
+       var phone = s
+        if((phone.startsWith("+91") && phone.length==13) || phone.length==10){
+            if(!phone.startsWith("+91"))
+            println("Phone fot web is "  + phone)
+            db.collection("users").document("+91" + phone).get().addOnCompleteListener {
+                if(it.result != null) {
+                    if (it.result!!.contains("uid")) {
+                        println("Yes user exists")
+                        val name = it.result!!["username"].toString()
+                        include.visibility = View.VISIBLE
+                        include.tv_mobile.text  = phone
+                        include.tv_username.text  = name
+                        include.b_decline.isEnabled = false
+                        include.b_decline.visibility = View.GONE
+                        include.b_accept.text = "Add"
+                        include.b_accept.setOnClickListener { sendRequest(phone, name) }
+
+                    }
+                }
+            }
         }
     }
 
@@ -103,7 +126,8 @@ class FragAddConnection : Fragment() {
                     searchList.add(it)
                 }
             }
-            setUpWithList(searchList)
+
+                setUpWithList(searchList)
         }else{
             setUpWithList(contactsList)
 
@@ -113,7 +137,13 @@ class FragAddConnection : Fragment() {
 
 
     fun setUpWithList(list:List<LocalContact>){
-            contactsAdapter = ContactsAdapter(list, ::sendRequest)
+        if(list.size!=0){
+            include.visibility = View.GONE
+        }
+            contactsAdapter = ContactsAdapter(
+                list,
+                ::sendRequest
+            )
             rv_contacts.apply {
                 setHasFixedSize(true)
                 layoutManager = viewManager
@@ -137,7 +167,10 @@ class FragAddConnection : Fragment() {
 
                 }
             }
-            contactsAdapter = ContactsAdapter(contactsList, ::sendRequest)
+            contactsAdapter = ContactsAdapter(
+                contactsList,
+                ::sendRequest
+            )
             rv_contacts.apply {
                 setHasFixedSize(true)
                 layoutManager = viewManager
@@ -191,10 +224,12 @@ class FragAddConnection : Fragment() {
                         "requests",
                         FieldValue.arrayUnion(PreferenceManager().getPhone(context!!))
                     ).addOnCompleteListener {
+
                         if (it.isSuccessful) {
+                            include.visibility = View.GONE
                             Toast.makeText(
                                 context,
-                                "Request Sent",
+                                "Request Sent to " + phone,
                                 Toast.LENGTH_LONG
                             ).show()
                             setUp()
@@ -266,7 +301,12 @@ class FragAddConnection : Fragment() {
             val phone = getFormattedPhoneNumber(phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER)))
             val name = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.DISPLAY_NAME))
             if(phone!=null) {
-                returnList.add(LocalContact(phone, name))
+                returnList.add(
+                    LocalContact(
+                        phone,
+                        name
+                    )
+                )
             }
         }
 

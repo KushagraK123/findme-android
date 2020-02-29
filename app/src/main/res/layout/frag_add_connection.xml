@@ -25,6 +25,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#ffffff"
+            android:maxLength="13"
+            android:inputType="textPersonName"
+            android:maxLines="1"
             android:hint="Enter mobile number of the user" />
     </com.google.android.material.textfield.TextInputLayout>
 

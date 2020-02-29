@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragAddConnection"
-        android:name="com.empyrealgames.findme.dashboard.FragAddConnection"
+        android:name="com.empyrealgames.findme.dashboard.ui.FragAddConnection"
         android:label="FragAddConnection">
         <action
             android:id="@+id/action_fragAddConnection_to_fragDash"
