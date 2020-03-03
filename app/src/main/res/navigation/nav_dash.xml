@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragDash"
-        android:name="com.empyrealgames.findme.dashboard.FragDash"
+        android:name="com.empyrealgames.findme.connections.FragDash"
         android:label="FragDash" >
         <action
             android:id="@+id/action_fragDash_to_fragAddConnection"
@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_fragDash_to_profiileDashboard"
             app:destination="@id/profiileDashboard" />
+        <action
+            android:id="@+id/action_fragDash_to_locationHistoryFrag"
+            app:destination="@id/locationHistoryFrag" />
     </fragment>
     <fragment
         android:id="@+id/fragAddConnection"
@@ -32,5 +35,16 @@
         <action
             android:id="@+id/action_profiileDashboard_to_fragDash"
             app:destination="@id/fragDash" />
+    </fragment>
+    <fragment
+        android:id="@+id/locationHistoryFrag"
+        android:name="com.empyrealgames.findme.dashboard.location.LocationHistoryFrag"
+        android:label="LocationHistoryFrag" >
+        <action
+            android:id="@+id/action_locationHistoryFrag_to_fragDash"
+            app:destination="@id/fragDash" />
+        <argument
+            android:name="Connection"
+            app:argType="com.empyrealgames.findme.dashboard.data.Connection" />
     </fragment>
 </navigation>

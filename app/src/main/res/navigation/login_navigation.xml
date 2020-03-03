@@ -20,7 +20,8 @@
             app:destination="@id/loginFrag" />
         <argument
             android:name="number"
-            app:argType="string" />
+            app:argType="string"
+            />
         <action
             android:id="@+id/action_otpFrag_to_fragSignUp"
             app:destination="@id/fragSignUp"

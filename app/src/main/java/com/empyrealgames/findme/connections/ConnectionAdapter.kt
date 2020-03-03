@@ -1,4 +1,4 @@
-package com.empyrealgames.findme.dashboard
+package com.empyrealgames.findme.connections
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -14,13 +14,14 @@ import androidx.appcompat.app.AlertDialog
 import com.empyrealgames.findme.R
 
 
-class ConnectionAdapter(private val myDataset: List<Connection>,  val delete: (phone:String) -> Unit,val context: Context) :
+class ConnectionAdapter(private val myDataset: List<Connection>,  val delete: (phone:String) -> Unit,val context: Context, val onCardClick:(connection:Connection)->Unit) :
     RecyclerView.Adapter<ConnectionAdapter.MyViewHolder>() {
 
     class MyViewHolder(connectionListItem: View) : RecyclerView.ViewHolder(connectionListItem){
         val tvMobile = connectionListItem.tv_mobile
         val tvUsername = connectionListItem.tv_username
         val bMenu = connectionListItem.b_menu
+        val card = connectionListItem.card
 
     }
 
@@ -28,7 +29,9 @@ class ConnectionAdapter(private val myDataset: List<Connection>,  val delete: (p
                                     viewType: Int): MyViewHolder {
         val connectionView = LayoutInflater.from(parent.context)
             .inflate(R.layout.connections_list_item, parent, false)
-        return MyViewHolder(connectionView)
+        return MyViewHolder(
+            connectionView
+        )
     }
 
 
@@ -44,6 +47,7 @@ class ConnectionAdapter(private val myDataset: List<Connection>,  val delete: (p
                 })
             val alert = builder.create()
             alert.show() }
+        holder.card.setOnClickListener { onCardClick(myDataset[position]) }
 
     }
     override fun getItemCount() = myDataset.size

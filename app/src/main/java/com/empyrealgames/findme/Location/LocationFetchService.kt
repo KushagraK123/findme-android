@@ -5,12 +5,7 @@ import android.app.IntentService
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.location.Location
 import android.os.SystemClock
-import com.empyrealgames.findme.firebase.updateLocation
-import com.google.android.gms.location.LocationServices
-import java.text.SimpleDateFormat
-import java.util.*
 
 class LocationFetchService : IntentService(LocationFetchService::class.simpleName){
     private var alarmMgr: AlarmManager? = null

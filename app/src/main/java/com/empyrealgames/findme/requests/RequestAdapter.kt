@@ -1,4 +1,4 @@
-package com.empyrealgames.findme.dashboard
+package com.empyrealgames.findme.requests
 
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +24,9 @@ class RequestAdapter(private val myDataset: List<Request>,  val decline: (phone:
                                     viewType: Int): MyViewHolder {
         val requestView = LayoutInflater.from(parent.context)
             .inflate(R.layout.requests_list_item, parent, false)
-        return MyViewHolder(requestView)
+        return MyViewHolder(
+            requestView
+        )
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int){

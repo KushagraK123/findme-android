@@ -11,104 +11,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 var CONNECTIONS = "connection"
 var USERS = "users"
 var REQUESTS = "requests"
-var USER = "user"
 var HAS_LOCATION_PERMISSION = "location_permission"
 var LOCATION_REQUESTS = "location_requests"
 var LOCATION_GRANTS = "location_grants"
 
 
-fun sendLocationPermissionRequest(
-    context: Context,
-    phone: String,
-    onSuccess: (String) -> Unit,
-    onFailed: (() -> Unit)? = null
-
-) {
-    val preferenceManager = PreferenceManager()
-    val currentUser = preferenceManager.getPhone(context)
-    val firestore = FirebaseFirestore.getInstance()
-    if (currentUser != null) {
-        firestore.collection("users").document(phone).update(
-            LOCATION_REQUESTS, FieldValue.arrayUnion(currentUser)
-        )
-            .addOnSuccessListener {
-                onSuccess(phone)
-            }.addOnFailureListener {
-                onFailed?.invoke()
-            }
-    }
-}
-
-
-fun acceptLocationPermissionRequest(
-    context: Context,
-    phone: String,
-    onSuccess: (String) -> Unit,
-    onFailed: (() -> Unit)? = null
-
-) {
-    val preferenceManager = PreferenceManager()
-    val currentUser = preferenceManager.getPhone(context)
-    val firestore = FirebaseFirestore.getInstance()
-    if (currentUser != null) {
-        val map = mapOf(HAS_LOCATION_PERMISSION to true)
-        firestore.collection(USERS).document(phone).collection(CONNECTIONS).document(currentUser)
-            .set(map)
-            .addOnSuccessListener {
-                firestore.collection(USERS).document(currentUser)
-                    .update(LOCATION_GRANTS, FieldValue.arrayUnion(phone))
-            }.addOnSuccessListener {
-                firestore.collection(USERS).document(currentUser)
-                    .update(LOCATION_REQUESTS, FieldValue.arrayRemove(phone))
-            }.addOnSuccessListener {
-                onSuccess(phone)
-            }.addOnFailureListener {
-                onFailed?.invoke()
-            }
-    }
-}
-
-fun deleteLocationPermissionRequest(
-    context: Context,
-    phone: String,
-    onSuccess: (String) -> Unit,
-    onFailed: (() -> Unit)? = null
-
-) {
-    val preferenceManager = PreferenceManager()
-    val currentUser = preferenceManager.getPhone(context)
-    val firestore = FirebaseFirestore.getInstance()
-    if (currentUser != null) {
-        firestore.collection(USERS).document(currentUser).update(
-            LOCATION_REQUESTS, FieldValue.arrayRemove(phone)
-        ).addOnSuccessListener {
-            onSuccess(phone)
-        }.addOnFailureListener {
-            onFailed?.invoke()
-        }
-    }
-}
-
-fun deleteLocationPermission(
-    context: Context,
-    phone: String,
-    onSuccess: (String) -> Unit,
-    onFailed: (() -> Unit)? = null
-) {
-    val preferenceManager = PreferenceManager()
-    val currentUser = preferenceManager.getPhone(context)
-    val firestore = FirebaseFirestore.getInstance()
-    if (currentUser != null) {
-        val map = mapOf(HAS_LOCATION_PERMISSION to false)
-        firestore.collection(USERS).document(phone).collection(CONNECTIONS).document(currentUser)
-            .set(map)
-            .addOnSuccessListener {
-                firestore.collection(USERS).document(currentUser).update(
-                    LOCATION_GRANTS, FieldValue.arrayRemove(phone)
-                )
-            }
-    }
-}
 
 fun acceptRequest(
     context: Context,
@@ -121,11 +28,11 @@ fun acceptRequest(
     val currentUser = preferenceManager.getPhone(context)
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
-        val map = mapOf(HAS_LOCATION_PERMISSION to false)
+        val map = mapOf(HAS_LOCATION_PERMISSION to true)
         firestore.collection(USERS).document(currentUser).collection(CONNECTIONS).document(phone)
             .set(map)
             .addOnSuccessListener {
-                val map = mapOf(HAS_LOCATION_PERMISSION to false)
+                val map = mapOf(HAS_LOCATION_PERMISSION to true)
                 firestore.collection(USERS).document(phone).collection(CONNECTIONS)
                     .document(currentUser).set(map)
                     .addOnSuccessListener {

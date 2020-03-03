@@ -1,4 +1,4 @@
-package com.empyrealgames.findme.dashboard
+package com.empyrealgames.findme.connections
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

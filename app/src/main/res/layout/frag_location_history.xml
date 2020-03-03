@@ -6,7 +6,7 @@
     tools:context=".connections.ConnectionsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_requests"
+        android:id="@+id/rv_location_history"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         >

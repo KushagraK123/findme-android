@@ -261,7 +261,6 @@ class FragAddConnection : Fragment() {
     ) {
         when (requestCode) {
             1 -> {
-                // If request is cancelled, the result arrays are empty.
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     fetchContactsList()
                     // permission was granted, yay! Do the
@@ -273,13 +272,7 @@ class FragAddConnection : Fragment() {
                 return
             }
 
-            // Add other 'when' lines to check for other
-            // permissions this app might request.
-            else -> {
-                // Ignore all other requests.
-            }
         }
-
 
     }
 

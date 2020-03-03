@@ -1,4 +1,4 @@
-package com.empyrealgames.findme.dashboard
+package com.empyrealgames.findme.connections
 
 import android.Manifest
 import android.content.Intent
@@ -20,6 +20,7 @@ import com.empyrealgames.findme.Location.LocationFetchService
 import com.empyrealgames.findme.dashboard.data.Connection
 import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
 import com.empyrealgames.findme.dashboard.data.Location
+import com.empyrealgames.findme.dashboard.location.LocationHistoryFragDirections
 import kotlinx.android.synthetic.main.frag_dash.*
 import kotlinx.android.synthetic.main.frag_dash.rv_connections
 import kotlinx.android.synthetic.main.toolbar.*
@@ -46,13 +47,24 @@ class FragDash : Fragment(), View.OnClickListener {
         checkLocationPermissionAndUpdateData()
         dataset = listOf()
         println("Inside conn frag ")
-        viewAdapter = ConnectionAdapter(dataset, ::deleteConnection, context!!)
+        viewAdapter = ConnectionAdapter(
+            dataset,
+            ::deleteConnection,
+            context!!,
+            ::onCardClick
+        )
         viewManager = LinearLayoutManager(context)
         connectionViewModel = ViewModelProvider(this).get(ConnectionViewModel::class.java)
         connectionViewModel.allConnections.observe( viewLifecycleOwner,
             Observer<List<Connection>> { t ->
                 if(context!=null)
-                    viewAdapter = ConnectionAdapter(t, ::deleteConnection, context!!)
+                    viewAdapter =
+                        ConnectionAdapter(
+                            t,
+                            ::deleteConnection,
+                            context!!,
+                            ::onCardClick
+                        )
                 rv_connections.adapter = viewAdapter
                 for(conn in t)
                     println("found connection with  " +  conn.phone)
@@ -66,8 +78,6 @@ class FragDash : Fragment(), View.OnClickListener {
             adapter = viewAdapter
         }
 
-        connectionViewModel.fetchLocations("+917447554968")
-
         connectionViewModel.allLocations.observe( viewLifecycleOwner,
             Observer<List<Location>> { t ->
                 for(loc in t)
@@ -77,6 +87,12 @@ class FragDash : Fragment(), View.OnClickListener {
         )
 
 
+    }
+
+    fun onCardClick(connection: Connection){
+        println("Clicked on card "  + connection.toString())
+        val direction = FragDashDirections.actionFragDashToLocationHistoryFrag(connection)
+        findNavController().navigate(direction)
     }
 
     fun initListeners(){
