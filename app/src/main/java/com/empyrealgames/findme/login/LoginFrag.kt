@@ -30,9 +30,7 @@ class LoginFrag : Fragment(){
             navController.navigate(action)
         }
         et_number.editText!!.addTextChangedListener {
-
             b_continue.isEnabled = !(it == null || it.length <10)
-
         }
     }
 
