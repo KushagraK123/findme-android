@@ -18,6 +18,7 @@ class ConnectionAdapter(private val myDataset: List<Connection>,  val delete: (p
     RecyclerView.Adapter<ConnectionAdapter.MyViewHolder>() {
 
     class MyViewHolder(connectionListItem: View) : RecyclerView.ViewHolder(connectionListItem){
+
         val tvMobile = connectionListItem.tv_mobile
         val tvUsername = connectionListItem.tv_username
         val bMenu = connectionListItem.b_menu

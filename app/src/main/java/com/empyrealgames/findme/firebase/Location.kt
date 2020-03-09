@@ -1,6 +1,7 @@
 package com.empyrealgames.findme.firebase
 
 import android.content.Context
+import com.empyrealgames.findme.dashboard.data.Connection
 import com.empyrealgames.findme.dashboard.data.Location
 import com.empyrealgames.findme.pref.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
@@ -32,7 +33,7 @@ fun updateLocation( time:String,  lat:String, long:String){
 fun sendLocationPermissionRequest(
     context: Context,
     phone: String,
-    onSuccess: (String) -> Unit,
+    onSuccess: () -> Unit,
     onFailed: (() -> Unit)? = null
 
 ) {
@@ -44,7 +45,7 @@ fun sendLocationPermissionRequest(
             LOCATION_REQUESTS, FieldValue.arrayUnion(currentUser)
         )
             .addOnSuccessListener {
-                onSuccess(phone)
+                onSuccess()
             }.addOnFailureListener {
                 onFailed?.invoke()
             }
@@ -63,13 +64,15 @@ fun acceptLocationPermissionRequest(
     val currentUser = preferenceManager.getPhone(context)
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
-        val map = mapOf(HAS_LOCATION_PERMISSION to true)
-        firestore.collection(USERS).document(phone).collection(CONNECTIONS).document(currentUser)
-            .set(map)
+        val map = mapOf(LOCATION_PERMISSION_GIVEN to true)
+        firestore.collection(USERS).document(currentUser).collection(CONNECTIONS).document(phone)
+            .set(map, SetOptions.merge())
             .addOnSuccessListener {
-                firestore.collection(USERS).document(currentUser)
-                    .update(LOCATION_GRANTS, FieldValue.arrayUnion(phone))
-            }.addOnSuccessListener {
+                val map2 = mapOf(LOCATION_PERMISSION_ACCESS to true)
+                firestore.collection(USERS).document(phone).collection(CONNECTIONS).document(currentUser)
+                    .set(map2, SetOptions.merge())
+            }
+           .addOnSuccessListener {
                 firestore.collection(USERS).document(currentUser)
                     .update(LOCATION_REQUESTS, FieldValue.arrayRemove(phone))
             }.addOnSuccessListener {
@@ -105,20 +108,51 @@ fun deleteLocationPermissionRequest(
 fun deleteLocationPermission(
     context: Context,
     phone: String,
-    onSuccess: (String) -> Unit,
+    onSuccess: () -> Unit,
     onFailed: (() -> Unit)? = null
 ) {
     val preferenceManager = PreferenceManager()
     val currentUser = preferenceManager.getPhone(context)
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
-        val map = mapOf(HAS_LOCATION_PERMISSION to false)
-        firestore.collection(USERS).document(phone).collection(CONNECTIONS).document(currentUser)
-            .set(map)
+        val map = mapOf(LOCATION_PERMISSION_GIVEN to false)
+        firestore.collection(USERS).document(currentUser).collection(CONNECTIONS).document(phone)
+            .set(map, SetOptions.merge())
             .addOnSuccessListener {
-                firestore.collection(USERS).document(currentUser).update(
-                    LOCATION_GRANTS, FieldValue.arrayRemove(phone)
-                )
+                val map2 = mapOf(LOCATION_PERMISSION_ACCESS to false)
+                firestore.collection(USERS).document(phone).collection(CONNECTIONS).document(currentUser)
+                    .set(map2, SetOptions.merge())
+            }.addOnSuccessListener {
+                onSuccess()
+            }.addOnFailureListener {
+                onFailed?.invoke()
+            }
+    }
+}
+
+fun grantLocationPermission(
+    context: Context,
+    phone: String,
+    onSuccess: (() -> Unit),
+    onFailed: (() -> Unit)
+
+){
+    val preferenceManager = PreferenceManager()
+    val currentUser = preferenceManager.getPhone(context)
+    val firestore = FirebaseFirestore.getInstance()
+    if (currentUser != null) {
+        val map = mapOf(LOCATION_PERMISSION_GIVEN to true)
+        firestore.collection(USERS).document(currentUser).collection(CONNECTIONS).document(phone)
+            .set(map, SetOptions.merge())
+            .addOnSuccessListener {
+                val map2 = mapOf(LOCATION_PERMISSION_ACCESS to true)
+                firestore.collection(USERS).document(phone).collection(CONNECTIONS).document(currentUser)
+                    .set(map2, SetOptions.merge())
+            }
+            .addOnSuccessListener {
+                onSuccess()
+            }.addOnFailureListener {
+                onFailed()
             }
     }
 }

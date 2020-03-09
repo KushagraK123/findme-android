@@ -11,7 +11,8 @@
         android:label="FragDash" >
         <action
             android:id="@+id/action_fragDash_to_fragAddConnection"
-            app:destination="@id/fragAddConnection" />
+            app:destination="@id/fragAddConnection"
+          />
         <action
             android:id="@+id/action_fragDash_to_profiileDashboard"
             app:destination="@id/profiileDashboard" />

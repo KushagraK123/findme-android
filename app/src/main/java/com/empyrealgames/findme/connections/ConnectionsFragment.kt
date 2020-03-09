@@ -36,21 +36,6 @@ class ConnectionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*dataset = listOf()
-        println("Inside conn frag ")
-        viewAdapter = ConnectionAdapter(dataset, ::deleteConnection, context!!)
-        viewManager = LinearLayoutManager(context)
-        connectionViewModel = ViewModelProvider(this).get(ConnectionViewModel::class.java)
-        connectionViewModel.allConnections.observe( viewLifecycleOwner,
-            Observer<List<Connection>> { t ->
-                if(context!=null)
-                viewAdapter = ConnectionAdapter(t, ::deleteConnection, context!!)
-                rv_connections.adapter = viewAdapter
-                for(conn in t)
-                println("found connection with  " +  conn.phone)
-            }
-
-        )*/
 
         rv_connections.apply {
             setHasFixedSize(true)

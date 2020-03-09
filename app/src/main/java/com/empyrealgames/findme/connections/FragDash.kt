@@ -19,8 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.empyrealgames.findme.Location.LocationFetchService
 import com.empyrealgames.findme.dashboard.data.Connection
 import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
-import com.empyrealgames.findme.dashboard.data.Location
-import com.empyrealgames.findme.dashboard.location.LocationHistoryFragDirections
 import kotlinx.android.synthetic.main.frag_dash.*
 import kotlinx.android.synthetic.main.frag_dash.rv_connections
 import kotlinx.android.synthetic.main.toolbar.*
@@ -78,13 +76,13 @@ class FragDash : Fragment(), View.OnClickListener {
             adapter = viewAdapter
         }
 
-        connectionViewModel.allLocations.observe( viewLifecycleOwner,
-            Observer<List<Location>> { t ->
-                for(loc in t)
-                    println("found location    " + loc)
-            }
-
-        )
+//        connectionViewModel.allLocations.observe( viewLifecycleOwner,
+//            Observer<List<Location>> { t ->
+//                for(loc in t)
+//                    println("found location    " + loc)
+//            }
+//
+//        )
 
 
     }
@@ -116,7 +114,7 @@ class FragDash : Fragment(), View.OnClickListener {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     activity!!,
-                    Manifest.permission.READ_CONTACTS
+                    Manifest.permission.ACCESS_COARSE_LOCATION
                 )
             ) {
             } else {

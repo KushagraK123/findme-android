@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.frag_add_connection.*
 import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.content.ContentResolver
+import android.content.Intent
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -37,11 +38,11 @@ import java.lang.StringBuilder
 
 class FragAddConnection : Fragment() {
 
+    val CONTACTS_PERMISSION_REQUEST_CODE = 2
     var isRequestsInit = false
     var isConnectionsInit = false
     private lateinit var db: FirebaseFirestore
     private var contactsList = mutableListOf<LocalContact>()
-    private lateinit var mAuth: FirebaseAuth
     private lateinit var navController: NavController
     private lateinit var contactsAdapter: ContactsAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -58,7 +59,6 @@ class FragAddConnection : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         db = FirebaseFirestore.getInstance()
-        mAuth = FirebaseAuth.getInstance()
         connectionList = setOf()
         isConnectionsInit = false
         isRequestsInit = false
@@ -70,7 +70,7 @@ class FragAddConnection : Fragment() {
             Observer{ t ->
                 connectionList = t.toSet()
                 isConnectionsInit = true
-                setUp()
+                checkPermissionAndFetchContacts()
             }
 
         )
@@ -78,7 +78,7 @@ class FragAddConnection : Fragment() {
             Observer { t ->
                 requestList = t.toSet()
                 isRequestsInit = true
-                setUp()
+                checkPermissionAndFetchContacts()
             }
 
         )
@@ -92,6 +92,31 @@ class FragAddConnection : Fragment() {
             searchOnWeb(editTextText)
         }
     }
+
+
+    fun checkPermissionAndFetchContacts() {
+        if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    activity!!,
+                    Manifest.permission.READ_CONTACTS
+                )
+            ) {
+            } else {
+                ActivityCompat.requestPermissions(
+                    activity!!,
+                    arrayOf(
+                        Manifest.permission.READ_CONTACTS
+                    ),
+                    CONTACTS_PERMISSION_REQUEST_CODE
+                )
+
+            }
+        }else{
+            setUp()
+        }
+    }
+
 
     fun searchOnWeb( s:String){
        var phone = s
@@ -330,6 +355,13 @@ class FragAddConnection : Fragment() {
             return null
         }
 
+
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if(requestCode == CONTACTS_PERMISSION_REQUEST_CODE){
+            setUp()
+        }
 
     }
 

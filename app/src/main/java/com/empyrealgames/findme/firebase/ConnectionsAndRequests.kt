@@ -11,9 +11,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 var CONNECTIONS = "connection"
 var USERS = "users"
 var REQUESTS = "requests"
-var HAS_LOCATION_PERMISSION = "location_permission"
+var LOCATION_PERMISSION_ACCESS = "location_permission_access"
+var LOCATION_PERMISSION_GIVEN = "location_permission_given"
 var LOCATION_REQUESTS = "location_requests"
-var LOCATION_GRANTS = "location_grants"
 
 
 
@@ -28,11 +28,11 @@ fun acceptRequest(
     val currentUser = preferenceManager.getPhone(context)
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
-        val map = mapOf(HAS_LOCATION_PERMISSION to true)
+        val map = mapOf(LOCATION_PERMISSION_ACCESS to true, LOCATION_PERMISSION_GIVEN to true)
         firestore.collection(USERS).document(currentUser).collection(CONNECTIONS).document(phone)
             .set(map)
             .addOnSuccessListener {
-                val map = mapOf(HAS_LOCATION_PERMISSION to true)
+                val map = mapOf(LOCATION_PERMISSION_ACCESS to true, LOCATION_PERMISSION_GIVEN to true)
                 firestore.collection(USERS).document(phone).collection(CONNECTIONS)
                     .document(currentUser).set(map)
                     .addOnSuccessListener {
@@ -109,7 +109,8 @@ fun getConnectionLists(
                         insertConnectionInRepo(
                             Connection(
                                 document.id,
-                                document.getBoolean(HAS_LOCATION_PERMISSION)!!
+                                locationPermissionAccess =  document.getBoolean(LOCATION_PERMISSION_ACCESS)!!,
+                                locationPermissionGiven = document.getBoolean(LOCATION_PERMISSION_GIVEN)!!
                             )
                         )
                     }

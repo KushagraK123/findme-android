@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_margin="4dp"
+app:cardElevation="4dp"
+app:cardCornerRadius="4dp"
+android:id="@+id/card"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_profile_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:cropToPadding="true"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="2dp"
+        android:src="@drawable/ic_person_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_username"
+        app:layout_constraintEnd_toStartOf="@+id/tv_username"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/fab_profile_pic"
+        app:layout_constraintTop_toTopOf="@+id/tv_username" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:text="Kushagra Kasliwal"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
+        app:layout_constraintTop_toTopOf="@+id/fab_profile_pic" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="2dp"
+        android:src="@drawable/ic_call_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_mobile"
+        app:layout_constraintEnd_toStartOf="@+id/tv_mobile"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/fab_profile_pic"
+        app:layout_constraintTop_toTopOf="@+id/tv_mobile" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_mobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:text="+91-8007350050"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_profile_pic"
+        app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
+        app:layout_constraintTop_toBottomOf="@+id/tv_username" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/b_toggle_location_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:background="#ffffff"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="Allow"
+        app:backgroundTint="@color/white"
+        app:iconTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

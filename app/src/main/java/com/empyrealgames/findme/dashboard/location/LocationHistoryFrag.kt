@@ -17,12 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.empyrealgames.findme.R
 import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
 import com.empyrealgames.findme.dashboard.data.Location
+import com.empyrealgames.findme.databinding.FragLocationHistoryBinding
+import com.empyrealgames.findme.firebase.sendLocationPermissionRequest
 import kotlinx.android.synthetic.main.frag_location_history.*
 
 
 class LocationHistoryFrag : Fragment() {
-
-
+    private lateinit var binding:FragLocationHistoryBinding
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var connectionViewModel: ConnectionViewModel
@@ -38,6 +39,33 @@ class LocationHistoryFrag : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragLocationHistoryBinding.bind(view)
+        binding.apply {
+            if(args.Connection.locationPermissionAccess){
+                loadLocations()
+                vNoLocationAccess.cNoLocationPermission.visibility = View.GONE
+                rvLocationHistory.visibility = View.VISIBLE
+            }else{
+                vNoLocationAccess.cNoLocationPermission.visibility = View.VISIBLE
+                rvLocationHistory.visibility = View.GONE
+                vNoLocationAccess.tvReqLocPer.text = "You have no access to ${args.Connection.phone}'s Location, would you like to send him her location request?"
+                vNoLocationAccess.bReqLocPer.setOnClickListener { sendLocationPermissionRequest(
+                    context!!, args.Connection.phone, ::onRequestSendSuccess, ::onRequestSendFailed ) }
+            }
+        }
+    }
+
+
+    fun onRequestSendSuccess(){
+
+    }
+
+    fun onRequestSendFailed(){
+
+    }
+
+    fun loadLocations(){
+
         dataset = listOf()
         viewManager = LinearLayoutManager(context)
         viewAdapter = LocationHistoryAdapter(
@@ -54,9 +82,6 @@ class LocationHistoryFrag : Fragment() {
                 )
                 rv_location_history.adapter = viewAdapter
             }
-
-
-
         )
 
         rv_location_history.apply {
