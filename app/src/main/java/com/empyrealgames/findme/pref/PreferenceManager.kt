@@ -1,29 +1,13 @@
 package com.empyrealgames.findme.pref
 
-import android.content.Context
-import android.content.SharedPreferences
-import java.util.prefs.Preferences
+import com.google.firebase.auth.FirebaseAuth
 
 class PreferenceManager{
-    val USERNAME  = "USERNAME"
-    val PHONE = "PHONE"
-    fun setUserName(username:String, context: Context){
-        val  preferences:SharedPreferences = context.getSharedPreferences("USER_PREF", Context.MODE_PRIVATE)
-        preferences.edit().putString(USERNAME, username).apply()
+    fun getUserName(): String? {
+        return FirebaseAuth.getInstance().currentUser!!.displayName
     }
 
-
-    fun getUserName(context: Context):String?{
-        return context.getSharedPreferences("USER_PREF", Context.MODE_PRIVATE).getString(USERNAME, "")
+    fun getPhone(): String? {
+        return FirebaseAuth.getInstance().currentUser!!.phoneNumber
     }
-
-    fun getPhone(context: Context):String?{
-        return context.getSharedPreferences("USER_PREF", Context.MODE_PRIVATE).getString(PHONE, "")
-    }
-
-    fun setPhone(phone:String, context: Context){
-        val  preferences:SharedPreferences = context.getSharedPreferences("USER_PREF", Context.MODE_PRIVATE)
-        preferences.edit().putString(PHONE, phone).apply()
-    }
-
 }

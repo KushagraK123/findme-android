@@ -12,7 +12,7 @@ class ManageLocationsPermissionAdapter(fragmentManager: FragmentManager,numTabs:
     override fun getItem(position: Int): Fragment {
         var frag:Fragment? = null
         when(position){
-            0->{frag = LocationRequestsFragments()
+            0->{frag = LocationPermissionRequestFragment()
             }
             1->{frag =  LocationsPermissionFragment()}
 

@@ -1,6 +1,5 @@
 package com.empyrealgames.findme.firebase
 
-import android.content.Context
 import com.empyrealgames.findme.dashboard.data.Connection
 import com.empyrealgames.findme.dashboard.data.Request
 import com.empyrealgames.findme.pref.PreferenceManager
@@ -18,14 +17,13 @@ var LOCATION_REQUESTS = "location_requests"
 
 
 fun acceptRequest(
-    context: Context,
     phone: String,
     onSuccess: (String) -> Unit,
     onFailed: (() -> Unit)? = null
 ) {
 
     val preferenceManager = PreferenceManager()
-    val currentUser = preferenceManager.getPhone(context)
+    val currentUser = preferenceManager.getPhone()
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
         val map = mapOf(LOCATION_PERMISSION_ACCESS to true, LOCATION_PERMISSION_GIVEN to true)
@@ -48,13 +46,12 @@ fun acceptRequest(
 
 
 fun deleteRequest(
-    context: Context,
     phone: String,
     onSuccess: (String) -> Unit,
     onFailed: (() -> Unit)? = null
 ) {
     val preferenceManager = PreferenceManager()
-    val currentUser = preferenceManager.getPhone(context)
+    val currentUser = preferenceManager.getPhone()
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
         firestore.collection("users").document(currentUser).update(
@@ -67,13 +64,12 @@ fun deleteRequest(
 
 
 fun deleteConnection(
-    context: Context,
     phone: String,
     onSuccess: (String) -> Unit,
     onFailed: (() -> Unit)? = null
 ) {
     val preferenceManager = PreferenceManager()
-    val currentUser = preferenceManager.getPhone(context)
+    val currentUser = preferenceManager.getPhone()
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
         firestore.collection("users").document(currentUser).collection(CONNECTIONS).document(phone)
@@ -90,12 +86,11 @@ fun deleteConnection(
 }
 
 fun getConnectionLists(
-    context: Context,
     insertConnectionInRepo: (Connection) -> Unit,
     onFailed: (() -> Unit)? = null
 ) {
     val preferenceManager = PreferenceManager()
-    val phone = preferenceManager.getPhone(context)
+    val phone = preferenceManager.getPhone()
     val firestore = FirebaseFirestore.getInstance()
     if (!phone.isNullOrBlank()) {
         firestore.collection(USERS).document(phone).collection(CONNECTIONS)
@@ -109,28 +104,30 @@ fun getConnectionLists(
                         insertConnectionInRepo(
                             Connection(
                                 document.id,
-                                locationPermissionAccess =  document.getBoolean(LOCATION_PERMISSION_ACCESS)!!,
-                                locationPermissionGiven = document.getBoolean(LOCATION_PERMISSION_GIVEN)!!
+                                locationPermissionAccess = document.getBoolean(
+                                    LOCATION_PERMISSION_ACCESS
+                                )!!,
+                                locationPermissionGiven = document.getBoolean(
+                                    LOCATION_PERMISSION_GIVEN
+                                )!!
                             )
                         )
                     }
                 }
 
             }
-
     }
 }
 
 
 fun getRequestsLists(
-    context: Context,
     insertRequestInRepo: (Request) -> Unit,
     onFailed: (() -> Unit)? = null
 ) {
     val preferenceManager = PreferenceManager()
     val firestore = FirebaseFirestore.getInstance()
 
-    val phone = preferenceManager.getPhone(context)
+    val phone = preferenceManager.getPhone()
     if (!phone.isNullOrBlank()) {
         firestore.collection(USERS).document(phone).addSnapshotListener { snapshot, e ->
             if (e != null) {

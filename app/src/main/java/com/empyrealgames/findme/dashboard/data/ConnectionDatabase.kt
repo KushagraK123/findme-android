@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Connection::class, Request::class, Location::class], version = 4)
+@Database(entities = [Connection::class, Request::class, Location::class, LocationPermissionRequest::class], version = 5)
 abstract class ConnectionDatabase : RoomDatabase() {
 
 

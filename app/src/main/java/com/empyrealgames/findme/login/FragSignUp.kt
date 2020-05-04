@@ -40,7 +40,7 @@ class FragSignUp : Fragment() {
     }
 
     fun signupUser() {
-        createAccount(context!!, et_name.text.toString(), et_lastname.text.toString(), ::onSuccessCreateAccount, ::onFailedCreateAccount)
+        createAccount(et_name.text.toString(), et_lastname.text.toString(), ::onSuccessCreateAccount, ::onFailedCreateAccount)
         dialog = showLoadingDialog(context!!)
         dialog.show()
     }

@@ -90,14 +90,12 @@ class LocationsPermissionFragment : Fragment() {
     fun toggleLocationPermission(connection: Connection) {
         if (connection.locationPermissionGiven) {
             deleteLocationPermission(
-                context!!,
                 connection.phone,
                 ::onDeletPermissionSuccess,
                 ::onFailed
             )
         } else {
             grantLocationPermission(
-                context!!,
                 connection.phone,
                 ::onLocationGrantSuccess,
                 ::onFailed

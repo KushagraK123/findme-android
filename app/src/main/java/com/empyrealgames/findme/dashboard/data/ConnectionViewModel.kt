@@ -14,23 +14,36 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
     var allConnections: LiveData<List<Connection>> = MutableLiveData()
     var allRequests: LiveData<List<Request>> = MutableLiveData()
     var allLocations:LiveData<List<Location>> = MutableLiveData()
+    var allLocationPermissionRequests :LiveData<List<LocationPermissionRequest>> = MutableLiveData()
 
     init {
         val connectionDao = ConnectionDatabase.getConnectionDatabase(application).connectionDao()
         repository = ConnectionRepository(connectionDao)
+        fetchConnections()
+        fetchRequests()
+        fetchLocationPermissionRequests()
         allConnections = repository.allConnections
         allRequests = repository.allRequests
         allLocations = repository.allLocations
-        fetchConnections()
-        fetchRequests()
+        allLocationPermissionRequests = repository.alLocationPermissionRequests
+    }
+    fun fetchLocationPermissionRequests(){
+        repository.deleteAllLocalLocationPermissionRequests()
+        getLocationPermissionRequests(::insertLocalLocationPermissionRequest)
+
+    }
+
+    fun insertLocalLocationPermissionRequest(locationPermissionRequest: LocationPermissionRequest){
+        repository.insertLocalLocationPermissionRequest(locationPermissionRequest)
+    }
+
+    fun clearAllData() {
+        println("clearing data")
+        repository.clearAllData()
     }
 
     fun insertLocalLocation(location: Location){
         repository.insertLocalLocation(location)
-    }
-
-    fun deleteAllLocalLocations() {
-        repository.deleteAllLocalLocation()
     }
 
     fun insertConnection(connection: Connection) {
@@ -47,7 +60,7 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
 
 
     fun deleteConnection(phone: String) {
-        deleteConnection(getApplication(),phone, ::deleteLocalConnection)
+        deleteConnection(phone, ::deleteLocalConnection)
     }
 
     fun deleteLocalRequest(phone: String){
@@ -55,25 +68,33 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun acceptRequest(phone: String) {
-        com.empyrealgames.findme.firebase.acceptRequest(getApplication(), phone, ::deleteRequest)
+        acceptRequest(phone, ::deleteRequest)
     }
 
     fun deleteRequest(phone: String) {
-        deleteRequest(getApplication(), phone, ::deleteLocalRequest)
+        deleteRequest(phone, ::deleteLocalRequest)
     }
 
      private fun fetchConnections() {
         repository.deleteAllLocalConnections()
-         getConnectionLists(getApplication(), ::insertConnection)
+         getConnectionLists(::insertConnection)
     }
 
     private fun fetchRequests() {
         repository.deleteAllLocalRequests()
-        getRequestsLists(getApplication(), ::insertRequest)
+        getRequestsLists(::insertRequest)
     }
      fun fetchLocations(connection:String){
         repository.deleteAllLocalLocation()
-        getLocationsList(getApplication(), connection, ::insertLocalLocation)
+        getLocationsList(connection, ::insertLocalLocation)
+    }
+
+    fun acceptLocationPermissionRequest(phone: String, onSuccess:()->Unit, onFailed:()->Unit){
+        acceptLocationPermissionRequest(phone = phone, onSuccess = onSuccess, onFailed = onFailed )
+    }
+
+    fun deleteLocationPermissionRequest(phone: String, onSuccess: () -> Unit, onFailed:()->Unit){
+        deleteLocationPermissionRequest(phone = phone, onSuccess = onSuccess, onFailed = onFailed)
     }
 
 }

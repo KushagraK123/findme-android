@@ -10,6 +10,7 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
     var allConnections: LiveData<List<Connection>> = connectionDao.allConnections()
     var allRequests: LiveData<List<Request>> = connectionDao.allRequests()
     var allLocations: LiveData<List<Location>> = connectionDao.allLocations()
+    var alLocationPermissionRequests:LiveData<List<LocationPermissionRequest>> = connectionDao.allLocationPermissionRequests()
 
     fun insertLocalConnection(connection: Connection) {
         InsertConnectionAsyncTask(
@@ -26,19 +27,37 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
     fun deleteAllLocalConnections() {
         DeleteAllConnectionAsyncTask(
             connectionDao
-        ).execute(0)
+        ).execute()
     }
 
     fun deleteAllLocalRequests() {
         DeleteAllRequestsAsyncTask(
             connectionDao
-        ).execute(0)
+        ).execute()
     }
 
     fun deleteLocalConnection(connection: Connection) {
         DeleteConnectionAsyncTask(
             connectionDao
         ).execute(connection)
+
+    }
+
+    fun clearAllData() {
+        DeleteAllConnectionAsyncTask(
+            connectionDao
+        ).execute()
+
+        DeleteAllRequestsAsyncTask(
+            connectionDao
+        ).execute()
+
+        DeleteAllLocationsAsyncTask(
+            connectionDao
+        ).execute()
+        DeleteAllLocationPermissionRequestsAsyncTask(
+            connectionDao
+        ).execute()
 
     }
 
@@ -49,7 +68,7 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
 
     }
     fun deleteAllLocalLocation() {
-        DeleteAllConnectionAsyncTask(
+        DeleteAllLocationsAsyncTask(
             connectionDao
         ).execute()
     }
@@ -61,7 +80,18 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
         ).execute(location)
     }
 
+    fun deleteAllLocalLocationPermissionRequests() {
+        DeleteAllLocationPermissionRequestsAsyncTask(
+            connectionDao
+        ).execute()
+    }
 
+
+    fun insertLocalLocationPermissionRequest(locationPermissionRequest: LocationPermissionRequest) {
+        InsertLocationPermissionRequest(
+            connectionDao
+        ).execute(locationPermissionRequest)
+    }
 
     private class InsertConnectionAsyncTask(connectionDao: ConnectionDao) :
         AsyncTask<Connection, Void, Int>() {
@@ -132,6 +162,7 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
         }
 
         override fun doInBackground(vararg params: Int?): Int {
+            println("Deleting connection from database")
             connectionDao!!.deleteAllConnections()
             return 0
         }
@@ -166,6 +197,8 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
         }
     }
 
+
+
     private class InsertAllLocations(connectionDao: ConnectionDao) :
         AsyncTask<Location, Unit, Unit>() {
         var connectionDao: ConnectionDao? = null
@@ -176,6 +209,33 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
 
         override fun doInBackground(vararg params: Location?) {
             connectionDao!!.insertAllLocations(params[0]!!)
+        }
+    }
+
+
+    private class DeleteAllLocationPermissionRequestsAsyncTask(connectionDao: ConnectionDao) :
+        AsyncTask<Unit, Unit, Unit>() {
+        var connectionDao: ConnectionDao? = null
+
+        init {
+            this.connectionDao = connectionDao
+        }
+
+        override fun doInBackground(vararg params: Unit?) {
+            connectionDao!!.deleteAllLocationPermissionRequests()
+        }
+    }
+
+    private class InsertLocationPermissionRequest(connectionDao: ConnectionDao) :
+        AsyncTask<LocationPermissionRequest, Unit, Unit>() {
+        var connectionDao: ConnectionDao? = null
+
+        init {
+            this.connectionDao = connectionDao
+        }
+
+        override fun doInBackground(vararg params: LocationPermissionRequest?) {
+            connectionDao!!.insertAllLocationPermissionRequest(params[0]!!)
         }
     }
 

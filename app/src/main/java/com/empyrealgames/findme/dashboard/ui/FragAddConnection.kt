@@ -247,7 +247,7 @@ class FragAddConnection : Fragment() {
                 db.collection("users").document(number)
                     .update(
                         "requests",
-                        FieldValue.arrayUnion(PreferenceManager().getPhone(context!!))
+                        FieldValue.arrayUnion(PreferenceManager().getPhone())
                     ).addOnCompleteListener {
 
                         if (it.isSuccessful) {

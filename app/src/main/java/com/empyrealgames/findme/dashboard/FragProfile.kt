@@ -1,23 +1,28 @@
 package com.empyrealgames.findme.dashboard
 
+import android.app.Activity
 import android.content.Intent
-import android.net.Uri
-import android.opengl.Visibility
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.empyrealgames.findme.R
+import com.empyrealgames.findme.dashboard.data.ConnectionDatabase
+import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
 import com.empyrealgames.findme.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.frag_profile.*
 
+
+const val minimumClickTime = 600L
+
 class FragProfile : Fragment(), View.OnClickListener, FirebaseAuth.AuthStateListener {
     lateinit var mAuth: FirebaseAuth
-
-
+    lateinit var connectionViewModel: ConnectionViewModel
+    private var lastTimeClicked = 0L
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,16 +31,14 @@ class FragProfile : Fragment(), View.OnClickListener, FirebaseAuth.AuthStateList
         return inflater.inflate(R.layout.frag_profile, container, false)
     }
 
-    interface OnFragmentInteractionListener {
-        fun onFragmentInteraction(uri: Uri)
-    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mAuth = FirebaseAuth.getInstance()
-        mAuth.addAuthStateListener(this)
+        connectionViewModel = ViewModelProvider(activity!!).get(ConnectionViewModel::class.java)
         //show progressbar
         updateData()
+        mAuth.addAuthStateListener(this)
     }
 
     fun updateData() {
@@ -50,13 +53,26 @@ class FragProfile : Fragment(), View.OnClickListener, FirebaseAuth.AuthStateList
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.b_logout -> FirebaseAuth.getInstance().signOut()
+            R.id.b_logout -> {
+                val currTime = System.currentTimeMillis()
+                if(currTime - lastTimeClicked > minimumClickTime) {
+                    lastTimeClicked = System.currentTimeMillis()
+                    FirebaseAuth.getInstance().signOut()
+                }
+                lastTimeClicked = currTime
+            }
         }
     }
 
     override fun onAuthStateChanged(auth: FirebaseAuth) {
-        if (auth.currentUser == null) {
-            startActivity(Intent(context, LoginActivity::class.java))
+        if(auth.currentUser == null) {
+            val intent = Intent(context, LoginActivity::class.java)
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            context!!.startActivity(intent)
+            if (context is Activity) {
+                (context as Activity).finish()
+            }
+            Runtime.getRuntime().exit(0)
         }
     }
 }

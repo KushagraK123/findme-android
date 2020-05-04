@@ -50,7 +50,7 @@ class LocationHistoryFrag : Fragment() {
                 rvLocationHistory.visibility = View.GONE
                 vNoLocationAccess.tvReqLocPer.text = "You have no access to ${args.Connection.phone}'s Location, would you like to send him her location request?"
                 vNoLocationAccess.bReqLocPer.setOnClickListener { sendLocationPermissionRequest(
-                    context!!, args.Connection.phone, ::onRequestSendSuccess, ::onRequestSendFailed ) }
+                     args.Connection.phone, ::onRequestSendSuccess, ::onRequestSendFailed ) }
             }
         }
     }

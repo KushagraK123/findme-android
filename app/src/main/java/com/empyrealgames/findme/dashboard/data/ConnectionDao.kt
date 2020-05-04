@@ -15,7 +15,7 @@ interface ConnectionDao {
     fun deleteConnection(vararg connection: Connection)
 
 
-    @Query("DELETE  FROM Connection")
+    @Query("DELETE FROM Connection")
     fun deleteAllConnections()
 
 
@@ -46,5 +46,23 @@ interface ConnectionDao {
 
     @Query("DELETE  FROM Location")
     fun deleteAllLocations()
+
+
+    @Query("SELECT * FROM LocationPermissionRequest ")
+    fun allLocationPermissionRequests ():LiveData<List<LocationPermissionRequest>>
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAllLocationPermissionRequest(vararg locationPermissionRequest: LocationPermissionRequest)
+
+
+    @Delete
+    fun deleteLocationPermissionRequest(vararg locationPermissionRequest: LocationPermissionRequest)
+
+
+    @Query("DELETE  FROM LocationPermissionRequest")
+    fun deleteAllLocationPermissionRequests()
+
+
 
 }
