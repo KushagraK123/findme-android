@@ -43,6 +43,12 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
 
     }
 
+    fun deleteLocationPermissionRequest(locationPermissionRequest: LocationPermissionRequest) {
+        DeleteLocationPermissionAsyncTask(
+            connectionDao
+        ).execute(locationPermissionRequest)
+    }
+
     fun clearAllData() {
         DeleteAllConnectionAsyncTask(
             connectionDao
@@ -119,6 +125,21 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
 
         override fun doInBackground(vararg params: Connection?): Int {
             connectionDao!!.deleteConnection(params[0]!!)
+            return 0
+
+        }
+    }
+
+    private class DeleteLocationPermissionAsyncTask(connectionDao: ConnectionDao) :
+        AsyncTask<LocationPermissionRequest, Void, Int>() {
+        var connectionDao: ConnectionDao? = null
+
+        init {
+            this.connectionDao = connectionDao
+        }
+
+        override fun doInBackground(vararg params: LocationPermissionRequest?): Int {
+            connectionDao!!.deleteLocationPermissionRequest(params[0]!!)
             return 0
 
         }

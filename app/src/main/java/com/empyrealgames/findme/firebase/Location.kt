@@ -54,7 +54,7 @@ fun sendLocationPermissionRequest(
 
 fun acceptLocationPermissionRequest(
     phone: String,
-    onSuccess: () -> Unit,
+    onSuccess: (String) -> Unit,
     onFailed: (() -> Unit)? = null
 
 ) {
@@ -74,7 +74,7 @@ fun acceptLocationPermissionRequest(
                 firestore.collection(USERS).document(currentUser)
                     .update(LOCATION_REQUESTS, FieldValue.arrayRemove(phone))
             }.addOnSuccessListener {
-                onSuccess()
+                onSuccess(phone)
             }.addOnFailureListener {
                 onFailed?.invoke()
             }
@@ -84,7 +84,7 @@ fun acceptLocationPermissionRequest(
 
 fun deleteLocationPermissionRequest(
     phone: String,
-    onSuccess: () -> Unit,
+    onSuccess: (String) -> Unit,
     onFailed: (() -> Unit)? = null
 
 ) {
@@ -95,7 +95,7 @@ fun deleteLocationPermissionRequest(
         firestore.collection(USERS).document(currentUser).update(
             LOCATION_REQUESTS, FieldValue.arrayRemove(phone)
         ).addOnSuccessListener {
-            onSuccess()
+            onSuccess(phone)
         }.addOnFailureListener {
             onFailed?.invoke()
         }
@@ -165,7 +165,7 @@ fun getLocationsList(
         firestore.collection(USERS).document(phone).collection(LOCATION)
             .addSnapshotListener { snapshot, e ->
             if (e != null) {
-                println("error in location in Location Firebase File " + e.message + " " + e.code)
+                onFailed?.invoke()
             }
             if (snapshot != null) {
                 val size = snapshot.size()
@@ -198,7 +198,7 @@ fun getLocationPermissionRequests(
         firestore.collection(USERS).document(phone)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
-                    println("error in fetching location permission requests Connection Repo " + e.message + " " + e.code)
+                    onFailed?.invoke()
                 }
                 if (snapshot != null ) {
                     if (snapshot.get(LOCATION_REQUESTS) != null) {

@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.empyrealgames.findme.R
-import com.empyrealgames.findme.dashboard.data.ConnectionDatabase
 import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
 import com.empyrealgames.findme.login.LoginActivity
+import com.empyrealgames.findme.utils.showLoadingDialog
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.frag_profile.*
 
@@ -57,7 +57,7 @@ class FragProfile : Fragment(), View.OnClickListener, FirebaseAuth.AuthStateList
                 val currTime = System.currentTimeMillis()
                 if(currTime - lastTimeClicked > minimumClickTime) {
                     lastTimeClicked = System.currentTimeMillis()
-                    FirebaseAuth.getInstance().signOut()
+                    mAuth.signOut()
                 }
                 lastTimeClicked = currTime
             }
@@ -66,13 +66,19 @@ class FragProfile : Fragment(), View.OnClickListener, FirebaseAuth.AuthStateList
 
     override fun onAuthStateChanged(auth: FirebaseAuth) {
         if(auth.currentUser == null) {
-            val intent = Intent(context, LoginActivity::class.java)
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
-            context!!.startActivity(intent)
-            if (context is Activity) {
-                (context as Activity).finish()
+            showLoadingDialog(context!!).show()
+            val thread = Thread {
+                Thread.sleep(600)
+                val intent = Intent(context, LoginActivity::class.java)
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+                context!!.startActivity(intent)
+                if (context is Activity) {
+                    (context as Activity).finish()
+                }
+                Runtime.getRuntime().exit(0)
             }
-            Runtime.getRuntime().exit(0)
+            thread.start()
+
         }
     }
 }

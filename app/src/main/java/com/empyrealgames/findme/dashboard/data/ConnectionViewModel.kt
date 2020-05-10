@@ -58,21 +58,24 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
         repository.deleteLocalConnection(Connection(phone))
     }
 
+    fun deleteLocalLocationPermissionRequest(phone: String) {
+        repository.deleteLocationPermissionRequest(LocationPermissionRequest(phone))
+    }
 
-    fun deleteConnection(phone: String) {
-        deleteConnection(phone, ::deleteLocalConnection)
+    fun deleteConnection(phone: String, onSuccess: (String) -> Unit, onFailed: () -> Unit) {
+        com.empyrealgames.findme.firebase.deleteConnection(phone, onSuccess, onFailed)
     }
 
     fun deleteLocalRequest(phone: String){
         repository.deleteLocalRequest(Request(phone))
     }
 
-    fun acceptRequest(phone: String) {
-        acceptRequest(phone, ::deleteRequest)
+    fun acceptRequest(phone: String, onSuccess: (String) -> Unit, onFailed: () -> Unit) {
+        com.empyrealgames.findme.firebase.acceptRequest(phone, onSuccess, onFailed)
     }
 
-    fun deleteRequest(phone: String) {
-        deleteRequest(phone, ::deleteLocalRequest)
+    fun deleteRequest(phone: String, onSuccess: (String) -> Unit, onFailed: () -> Unit) {
+        com.empyrealgames.findme.firebase.deleteRequest(phone, onSuccess, onFailed)
     }
 
      private fun fetchConnections() {
@@ -89,13 +92,14 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
         getLocationsList(connection, ::insertLocalLocation)
     }
 
-    fun acceptLocationPermissionRequest(phone: String, onSuccess:()->Unit, onFailed:()->Unit){
-        acceptLocationPermissionRequest(phone = phone, onSuccess = onSuccess, onFailed = onFailed )
+    fun acceptLocationPermissionRequest(phone: String, onSuccess:(String)->Unit, onFailed:()->Unit){
+        com.empyrealgames.findme.firebase.acceptLocationPermissionRequest(phone = phone, onSuccess = onSuccess, onFailed = onFailed )
     }
 
-    fun deleteLocationPermissionRequest(phone: String, onSuccess: () -> Unit, onFailed:()->Unit){
-        deleteLocationPermissionRequest(phone = phone, onSuccess = onSuccess, onFailed = onFailed)
+    fun deleteLocationPermissionRequest(phone: String, onSuccess: (String) -> Unit, onFailed:()->Unit){
+        com.empyrealgames.findme.firebase.deleteLocationPermissionRequest(phone = phone, onSuccess = onSuccess, onFailed = onFailed)
     }
+
 
 }
 

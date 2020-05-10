@@ -14,13 +14,13 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.empyrealgames.findme.R
 import com.empyrealgames.findme.pref.PreferenceManager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.frag_add_connection.*
 import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.content.ContentResolver
 import android.content.Intent
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -31,7 +31,8 @@ import com.empyrealgames.findme.dashboard.LocalContact
 import com.empyrealgames.findme.dashboard.data.Connection
 import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
 import com.empyrealgames.findme.dashboard.data.Request
-import com.empyrealgames.findme.showDialogUserNotFound
+import com.empyrealgames.findme.utils.showDialogUserNotFound
+import com.empyrealgames.findme.utils.showLoadingDialog
 import kotlinx.android.synthetic.main.requests_list_item.view.*
 import java.lang.StringBuilder
 
@@ -49,6 +50,9 @@ class FragAddConnection : Fragment() {
     private lateinit var connectionViewModel: ConnectionViewModel
     private lateinit var requestList: Set<Request>
     private lateinit var connectionList: Set<Connection>
+    private val loadingDialog: AlertDialog by lazy {
+        showLoadingDialog(context!!)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -240,6 +244,7 @@ class FragAddConnection : Fragment() {
     }
 
     fun sendRequest(phone:String, name:String){
+        loadingDialog.show()
         val number = "+91" + phone
         db.collection("users").document(number).get().addOnCompleteListener {
             if (it.result!!.contains("uid")) {
@@ -259,19 +264,29 @@ class FragAddConnection : Fragment() {
                             ).show()
                             setUp()
                             println("request added successfully")
+                            if (loadingDialog.isShowing)
+                                loadingDialog.dismiss()
                         } else {
+                            if (loadingDialog.isShowing)
+                                loadingDialog.dismiss()
                             Toast.makeText(
                                 context,
                                 "Unable to send request at the moment!",
                                 Toast.LENGTH_LONG
                             ).show()
                             println("request failed")
-
                         }
                     }
 
             } else {
-                showDialogUserNotFound(context!!, phone, name, ::sendInvite).show()
+                if (loadingDialog.isShowing)
+                    loadingDialog.dismiss()
+                showDialogUserNotFound(
+                    context!!,
+                    phone,
+                    name,
+                    ::sendInvite
+                ).show()
                 println("no user does not exists, show dialog")
             }
         }

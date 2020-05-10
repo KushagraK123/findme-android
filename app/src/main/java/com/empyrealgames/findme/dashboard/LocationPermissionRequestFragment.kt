@@ -1,7 +1,6 @@
 package com.empyrealgames.findme.dashboard
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,7 @@ import com.empyrealgames.findme.R
 import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
 import com.empyrealgames.findme.dashboard.data.LocationPermissionRequest
 import com.empyrealgames.findme.databinding.FragLocationPermissionsRequestsBinding
-import com.empyrealgames.findme.showLoadingDialog
+import com.empyrealgames.findme.utils.showLoadingDialog
 
 class LocationPermissionRequestFragment : Fragment() {
 
@@ -40,11 +39,8 @@ class LocationPermissionRequestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragLocationPermissionsRequestsBinding.bind(view)
-        loadingDialog = showLoadingDialog(context!!)
-        loadData()
-    }
-
-    fun loadData(){
+        loadingDialog =
+            showLoadingDialog(context!!)
         dataset = mutableListOf()
         viewManager = LinearLayoutManager(context)
         viewAdapter = LocationPermissionRequestAdapter(
@@ -52,6 +48,7 @@ class LocationPermissionRequestFragment : Fragment() {
             onPositiveClicked =  ::acceptRequest,
             onNegativeClicked = ::declineRequest
         )
+
         connectionViewModel = ViewModelProvider(this).get(ConnectionViewModel::class.java)
         connectionViewModel.allLocationPermissionRequests.observe( viewLifecycleOwner,
             Observer<List<LocationPermissionRequest>> { t ->
@@ -59,7 +56,7 @@ class LocationPermissionRequestFragment : Fragment() {
                     t,
                     onPositiveClicked = ::acceptRequest,
                     onNegativeClicked = ::declineRequest
-                    )
+                )
                 binding.apply {
                     rvLocationPermissionRequests.adapter = viewAdapter
                 }
@@ -73,21 +70,19 @@ class LocationPermissionRequestFragment : Fragment() {
             }
             progressBar.visibility = View.GONE
         }
-
     }
+
 
     fun acceptRequest(locationPermissionRequest: LocationPermissionRequest){
         loadingDialog.show()
-        println("Accept request clicked")
         connectionViewModel.acceptLocationPermissionRequest(locationPermissionRequest.phone, ::onSuccess, ::onFailed)
     }
 
-    fun onSuccess(){
+    fun onSuccess(phone: String){
+        connectionViewModel.deleteLocalLocationPermissionRequest(phone)
         if(loadingDialog.isShowing){
-            println("Success Accepting request")
             loadingDialog.dismiss()
         }
-        loadData()
     }
     fun onFailed(){
         if(loadingDialog.isShowing){
@@ -97,7 +92,7 @@ class LocationPermissionRequestFragment : Fragment() {
     }
 
     fun declineRequest(locationPermissionRequest: LocationPermissionRequest){
-        println("click decline request, daahhhh")
+        loadingDialog.show()
         connectionViewModel.deleteLocationPermissionRequest(locationPermissionRequest.phone, ::onSuccess, ::onFailed)
     }
 

@@ -19,7 +19,7 @@ class LocationPermissionRequestAdapter(private val myDataset: List<LocationPermi
         val tvMobile = locationPermissionListItem.tv_mobile
         val tvUsername = locationPermissionListItem.tv_username
         val bAccept = locationPermissionListItem.b_accept
-        val bDecline = locationPermissionListItem.b_accept
+        val bDecline = locationPermissionListItem.b_decline
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,

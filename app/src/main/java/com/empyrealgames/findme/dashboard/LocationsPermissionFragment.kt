@@ -17,7 +17,7 @@ import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
 import com.empyrealgames.findme.databinding.FragLocationsPermissionsBinding
 import com.empyrealgames.findme.firebase.deleteLocationPermission
 import com.empyrealgames.findme.firebase.grantLocationPermission
-import com.empyrealgames.findme.showLoadingDialog
+import com.empyrealgames.findme.utils.showLoadingDialog
 import kotlinx.android.synthetic.main.frag_profile.*
 
 
@@ -41,7 +41,8 @@ class LocationsPermissionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragLocationsPermissionsBinding.bind(view)
-        loadingDialog = showLoadingDialog(context!!)
+        loadingDialog =
+            showLoadingDialog(context!!)
         dataset = listOf()
         viewAdapter =
             LocationPermissionAdapter(

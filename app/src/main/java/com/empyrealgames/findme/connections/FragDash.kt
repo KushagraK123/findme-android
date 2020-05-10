@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.empyrealgames.findme.Location.LocationFetchService
 import com.empyrealgames.findme.dashboard.data.Connection
 import com.empyrealgames.findme.dashboard.data.ConnectionViewModel
+import com.empyrealgames.findme.utils.showLoadingDialog
 import kotlinx.android.synthetic.main.frag_dash.*
 import kotlinx.android.synthetic.main.frag_dash.rv_connections
 import kotlinx.android.synthetic.main.toolbar.*
@@ -31,6 +34,7 @@ class FragDash : Fragment(), View.OnClickListener {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var connectionViewModel: ConnectionViewModel
     private lateinit var dataset: List<Connection>
+    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +48,8 @@ class FragDash : Fragment(), View.OnClickListener {
         initListeners()
         checkLocationPermissionAndUpdateData()
         dataset = listOf()
+        loadingDialog =
+            showLoadingDialog(context!!)
         println("Inside conn frag ")
         viewAdapter = ConnectionAdapter(
             dataset,
@@ -99,7 +105,8 @@ class FragDash : Fragment(), View.OnClickListener {
     }
 
     fun deleteConnection(phone:String){
-        connectionViewModel.deleteConnection(phone)
+        loadingDialog.show()
+        connectionViewModel.deleteConnection(phone, ::onSuccess, ::onFailed)
     }
 
     override fun onClick(v: View?) {
@@ -134,6 +141,19 @@ class FragDash : Fragment(), View.OnClickListener {
         }
     }
 
+    fun onSuccess(phone: String){
+        connectionViewModel.deleteLocalConnection(phone)
+        if(loadingDialog.isShowing){
+            loadingDialog.dismiss()
+        }
+        Toast.makeText(context!!, "Deleted connections successfully!", Toast.LENGTH_LONG).show()
+    }
+    fun onFailed(){
+        if(loadingDialog.isShowing){
+            loadingDialog.dismiss()
+        }
+        Toast.makeText(context!!, "Cant delete connection", Toast.LENGTH_SHORT).show()
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 

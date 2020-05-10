@@ -1,13 +1,11 @@
-package com.empyrealgames.findme
+package com.empyrealgames.findme.utils
 
 
 import android.content.Context
-import android.provider.ContactsContract
 import android.view.LayoutInflater
-import android.view.Window
 import androidx.appcompat.app.AlertDialog
+import com.empyrealgames.findme.R
 import com.empyrealgames.findme.databinding.DialogUserNotFoundBinding
-import com.empyrealgames.findme.databinding.LoadingDialogBinding
 
 fun showDialogUserNotFound(
     context: Context,

@@ -8,16 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.empyrealgames.findme.R
 import com.empyrealgames.findme.dashboard.ActivityDash
 import com.empyrealgames.findme.firebase.createAccount
-import com.empyrealgames.findme.pref.PreferenceManager
-import com.empyrealgames.findme.showLoadingDialog
+import com.empyrealgames.findme.utils.showLoadingDialog
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import kotlinx.android.synthetic.main.frag_signup.*
 
 class FragSignUp : Fragment() {

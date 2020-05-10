@@ -38,6 +38,8 @@ fun acceptRequest(
                             REQUESTS, FieldValue.arrayRemove(phone)
                         ).addOnSuccessListener {
                             onSuccess(phone)
+                        }.addOnFailureListener {
+                            onFailed?.invoke()
                         }
                     }
             }
@@ -58,6 +60,8 @@ fun deleteRequest(
             "requests", FieldValue.arrayRemove(phone)
         ).addOnSuccessListener {
             onSuccess(phone)
+        }.addOnFailureListener {
+            onFailed?.invoke()
         }
     }
 }
@@ -79,6 +83,8 @@ fun deleteConnection(
                     .document(currentUser).delete()
                     .addOnSuccessListener {
                         onSuccess(phone)
+                    }.addOnFailureListener {
+                        onFailed?.invoke()
                     }
             }
     }
@@ -96,7 +102,7 @@ fun getConnectionLists(
         firestore.collection(USERS).document(phone).collection(CONNECTIONS)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
-                    println("error in fetching connections Connection Repo " + e.message + " " + e.code)
+                    onFailed?.invoke()
                 }
                 if (snapshot != null && !snapshot.documents.isEmpty()) {
                     for (document in snapshot.documents) {
@@ -131,7 +137,7 @@ fun getRequestsLists(
     if (!phone.isNullOrBlank()) {
         firestore.collection(USERS).document(phone).addSnapshotListener { snapshot, e ->
             if (e != null) {
-                println("error in fetching requests  Repo " + e.message + " " + e.code)
+                onFailed?.invoke()
             }
             if (snapshot != null) {
                 if (snapshot.get(REQUESTS) != null) {
