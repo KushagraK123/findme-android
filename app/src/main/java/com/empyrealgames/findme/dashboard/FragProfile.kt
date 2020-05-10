@@ -65,7 +65,7 @@ class FragProfile : Fragment(), View.OnClickListener, FirebaseAuth.AuthStateList
     }
 
     override fun onAuthStateChanged(auth: FirebaseAuth) {
-        if(auth.currentUser == null) {
+        if (auth.currentUser == null && context != null) {
             showLoadingDialog(context!!).show()
             val thread = Thread {
                 Thread.sleep(600)

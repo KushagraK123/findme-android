@@ -26,22 +26,33 @@ fun acceptRequest(
     val currentUser = preferenceManager.getPhone()
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
-        val map = mapOf(LOCATION_PERMISSION_ACCESS to true, LOCATION_PERMISSION_GIVEN to true)
-        firestore.collection(USERS).document(currentUser).collection(CONNECTIONS).document(phone)
-            .set(map)
+
+        val batch = firestore.batch()
+
+        val map1 = mapOf(LOCATION_PERMISSION_ACCESS to true, LOCATION_PERMISSION_GIVEN to true)
+        batch.set(
+            firestore.collection(USERS).document(currentUser).collection(CONNECTIONS).document(
+                phone
+            ), map1
+        )
+        val map2 = mapOf(LOCATION_PERMISSION_ACCESS to true, LOCATION_PERMISSION_GIVEN to true)
+        batch.set(
+            firestore.collection(USERS).document(phone).collection(CONNECTIONS).document(
+                currentUser
+            ), map2
+        )
+        batch.update(
+            firestore.collection(USERS).document(currentUser),
+            REQUESTS,
+            FieldValue.arrayRemove(phone)
+        )
+
+        batch.commit()
             .addOnSuccessListener {
-                val map = mapOf(LOCATION_PERMISSION_ACCESS to true, LOCATION_PERMISSION_GIVEN to true)
-                firestore.collection(USERS).document(phone).collection(CONNECTIONS)
-                    .document(currentUser).set(map)
-                    .addOnSuccessListener {
-                        firestore.collection(USERS).document(currentUser).update(
-                            REQUESTS, FieldValue.arrayRemove(phone)
-                        ).addOnSuccessListener {
-                            onSuccess(phone)
-                        }.addOnFailureListener {
-                            onFailed?.invoke()
-                        }
-                    }
+                onSuccess(phone)
+            }.addOnFailureListener {
+                onFailed?.invoke()
+                println("${it.message} ${it.cause}")
             }
     }
 }
@@ -56,13 +67,18 @@ fun deleteRequest(
     val currentUser = preferenceManager.getPhone()
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
-        firestore.collection("users").document(currentUser).update(
-            "requests", FieldValue.arrayRemove(phone)
-        ).addOnSuccessListener {
-            onSuccess(phone)
-        }.addOnFailureListener {
-            onFailed?.invoke()
-        }
+        val batch = firestore.batch()
+        batch.update(
+            firestore.collection("users").document(currentUser),
+            "requests",
+            FieldValue.arrayRemove(phone)
+        )
+        batch.commit()
+            .addOnSuccessListener {
+                onSuccess(phone)
+            }.addOnFailureListener {
+                onFailed?.invoke()
+            }
     }
 }
 
@@ -76,20 +92,25 @@ fun deleteConnection(
     val currentUser = preferenceManager.getPhone()
     val firestore = FirebaseFirestore.getInstance()
     if (currentUser != null) {
-        firestore.collection("users").document(currentUser).collection(CONNECTIONS).document(phone)
-            .delete()
+        val batch = firestore.batch()
+        batch.delete(
+            firestore.collection("users").document(currentUser).collection(CONNECTIONS).document(
+                phone
+            )
+        )
+        batch.delete(
+            firestore.collection("users").document(phone).collection(CONNECTIONS)
+                .document(currentUser)
+        )
+        batch.commit()
             .addOnSuccessListener {
-                firestore.collection("users").document(phone).collection(CONNECTIONS)
-                    .document(currentUser).delete()
-                    .addOnSuccessListener {
-                        onSuccess(phone)
-                    }.addOnFailureListener {
-                        onFailed?.invoke()
-                    }
+                onSuccess(phone)
+            }.addOnFailureListener {
+                onFailed?.invoke()
             }
     }
-
 }
+
 
 fun getConnectionLists(
     insertConnectionInRepo: (Connection) -> Unit,
