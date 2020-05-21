@@ -43,6 +43,10 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun insertLocalLocation(location: Location){
+        println(
+            "Insert location in repo viewmodel $location"
+        )
+
         repository.insertLocalLocation(location)
     }
 

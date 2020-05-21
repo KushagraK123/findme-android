@@ -32,7 +32,7 @@ interface ConnectionDao {
     @Query("DELETE  FROM Request")
     fun deleteAllRequests()
 
-    @Query("SELECT * FROM Location ")
+    @Query("SELECT * FROM Location")
     fun allLocations ():LiveData<List<Location>>
 
 

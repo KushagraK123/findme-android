@@ -2,16 +2,28 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8e77c81c1050e771e30b538365575a2e",
+    "identityHash": "b93766c80bdbaf5a10129301fad70b1a",
     "entities": [
       {
         "tableName": "Connection",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`phone` TEXT NOT NULL, PRIMARY KEY(`phone`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`phone` TEXT NOT NULL, `locationPermissionAccess` INTEGER NOT NULL, `locationPermissionGiven` INTEGER NOT NULL, PRIMARY KEY(`phone`))",
         "fields": [
           {
             "fieldPath": "phone",
             "columnName": "phone",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "locationPermissionAccess",
+            "columnName": "locationPermissionAccess",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "locationPermissionGiven",
+            "columnName": "locationPermissionGiven",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -46,7 +58,7 @@
       },
       {
         "tableName": "Location",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` TEXT NOT NULL, `lat` TEXT NOT NULL, PRIMARY KEY(`time`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` TEXT NOT NULL, `lat` TEXT NOT NULL, `phone` TEXT NOT NULL, PRIMARY KEY(`phone`))",
         "fields": [
           {
             "fieldPath": "time",
@@ -59,11 +71,37 @@
             "columnName": "lat",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "time"
+            "phone"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "LocationPermissionRequest",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`phone` TEXT NOT NULL, PRIMARY KEY(`phone`))",
+        "fields": [
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "phone"
           ],
           "autoGenerate": false
         },
@@ -74,7 +112,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8e77c81c1050e771e30b538365575a2e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b93766c80bdbaf5a10129301fad70b1a')"
     ]
   }
 }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "4e6fadd5fec12c8c028f9dc228e7b9d0",
+    "identityHash": "f850909ad14c83354ccf0085eee96327",
     "entities": [
       {
         "tableName": "Connection",
@@ -58,7 +58,7 @@
       },
       {
         "tableName": "Location",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` TEXT NOT NULL, `lat` TEXT NOT NULL, PRIMARY KEY(`time`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` TEXT NOT NULL, `longitude` TEXT NOT NULL, `lat` TEXT NOT NULL, `phone` TEXT NOT NULL, PRIMARY KEY(`time`))",
         "fields": [
           {
             "fieldPath": "time",
@@ -67,8 +67,20 @@
             "notNull": true
           },
           {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "lat",
             "columnName": "lat",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -81,12 +93,32 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "LocationPermissionRequest",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`phone` TEXT NOT NULL, PRIMARY KEY(`phone`))",
+        "fields": [
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "phone"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4e6fadd5fec12c8c028f9dc228e7b9d0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f850909ad14c83354ccf0085eee96327')"
     ]
   }
 }

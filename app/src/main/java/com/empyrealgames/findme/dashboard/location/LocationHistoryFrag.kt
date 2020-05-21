@@ -76,8 +76,11 @@ class LocationHistoryFrag : Fragment() {
         connectionViewModel.fetchLocations(args.Connection.phone)
         connectionViewModel.allLocations.observe( viewLifecycleOwner,
             Observer<List<Location>> { t ->
+                val tForPhone = t.filter {
+                    it.phone == args.Connection.phone
+                }
                 viewAdapter = LocationHistoryAdapter(
-                    t,
+                    tForPhone,
                     ::seeOnMap
                 )
                 rv_location_history.adapter = viewAdapter

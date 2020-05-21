@@ -81,6 +81,9 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
 
 
     fun insertLocalLocation(location: Location) {
+        println(
+            "Insert location in repo repo $location"
+        )
         InsertAllLocations(
             connectionDao
         ).execute(location)
@@ -183,7 +186,6 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
         }
 
         override fun doInBackground(vararg params: Int?): Int {
-            println("Deleting connection from database")
             connectionDao!!.deleteAllConnections()
             return 0
         }
@@ -230,6 +232,7 @@ class ConnectionRepository(private var connectionDao: ConnectionDao) {
 
         override fun doInBackground(vararg params: Location?) {
             connectionDao!!.insertAllLocations(params[0]!!)
+            println("Async inserting ${params[0]}")
         }
     }
 

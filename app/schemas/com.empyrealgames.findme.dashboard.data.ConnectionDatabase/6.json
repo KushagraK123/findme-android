@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "d9bfaaf3426e26833d7434b559fd35bd",
+    "version": 6,
+    "identityHash": "b93766c80bdbaf5a10129301fad70b1a",
     "entities": [
       {
         "tableName": "Connection",
@@ -58,17 +58,11 @@
       },
       {
         "tableName": "Location",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` TEXT NOT NULL, `longitude` TEXT NOT NULL, `lat` TEXT NOT NULL, `phone` TEXT NOT NULL, PRIMARY KEY(`phone`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` TEXT NOT NULL, `lat` TEXT NOT NULL, `phone` TEXT NOT NULL, PRIMARY KEY(`phone`))",
         "fields": [
           {
             "fieldPath": "time",
             "columnName": "time",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "longitude",
-            "columnName": "longitude",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -118,7 +112,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd9bfaaf3426e26833d7434b559fd35bd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b93766c80bdbaf5a10129301fad70b1a')"
     ]
   }
 }

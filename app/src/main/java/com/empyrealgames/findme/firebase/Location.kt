@@ -202,11 +202,17 @@ fun getLocationsList(
                 val size = snapshot.size()
                 println("ftech $size locations of user $phone")
                 for(document in snapshot.documents){
+                    println(
+                        "Insert location in repo ${document.get(LATITUTE).toString()} ${document.get(
+                            LONGITUDE
+                        ).toString()}"
+                    )
                     insertLocationInRepo(
                         Location(
-                            document.id,
-                            document.get(LATITUTE).toString(),
-                            document.get(LONGITUDE).toString()
+                            phone = phone,
+                            time = document.id,
+                            lat = document.get(LATITUTE).toString(),
+                            longitude = document.get(LONGITUDE).toString()
                         )
                     )
                 }

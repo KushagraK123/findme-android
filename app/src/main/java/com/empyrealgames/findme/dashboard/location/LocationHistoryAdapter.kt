@@ -29,7 +29,7 @@ class LocationHistoryAdapter(private val myDataset: List<Location>, val seeOnMap
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int){
         holder.tvTime.text = myDataset[position].time
-        holder.tvPlace.text = myDataset[position].lat + " " + myDataset[position].long
+        holder.tvPlace.text = myDataset[position].lat + " " + myDataset[position].longitude
         holder.bShowOnMap.setOnClickListener { seeOnMap(Location("12;30", "1.77777", "7.444454")) }
     }
     override fun getItemCount() = myDataset.size
